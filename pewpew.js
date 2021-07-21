@@ -7,6 +7,10 @@ var fireX = 0
 var rightPressed = false;
 var leftPressed = false;
 var spacePressed = false;
+var targetX
+var targetY
+var createTarget= true
+var score=0
 
 let y = 0
 let x= 0
@@ -22,7 +26,7 @@ function keyDownHandler(e) {
         leftPressed = true;
     } else if(e.key == " ") {
         spacePressed = true;
-        fireX=x
+        fireX=x + 20
     }
 }
 
@@ -39,6 +43,14 @@ function drawFire(y) {
     ctx.beginPath();
     ctx.arc(fireX, y, 8, 0, Math.PI*2);
     ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  function target() {
+    ctx.beginPath();
+    ctx.arc(targetX, targetY, 8, 0, Math.PI*2);
+    ctx.fillStyle = "red";
     ctx.fill();
     ctx.closePath();
   }
@@ -86,6 +98,13 @@ let y= mainY+580
       
 }
 
+function collisionDetection() {
+    if( targetY-fireY <= 100 && targetX-fireX<= 10 &&  spacePressed) {
+      score++
+      createTarget=true;
+    }
+  }
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if(rightPressed 
@@ -108,6 +127,17 @@ function draw() {
             fireY= bottom;
             spacePressed = false;
         }
+        collisionDetection()
+        
+        
+        if(createTarget){
+            createTarget=false;
+             targetX = Math.floor(Math.random() *( right-20 )) + 1
+             targetY = Math.floor(Math.random() * (bottom-80)) + 1
+        }
+        target()
+
+
 
 
     drawCannon(x,y)
