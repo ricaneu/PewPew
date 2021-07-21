@@ -2,8 +2,11 @@ var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var bottom = 700
 var right = 1200
+var fireY = bottom
+var fireX = 0
 var rightPressed = false;
 var leftPressed = false;
+var spacePressed = false;
 
 let y = 0
 let x= 0
@@ -17,6 +20,9 @@ function keyDownHandler(e) {
     }
     else if(e.key == "Left" || e.key == "ArrowLeft") {
         leftPressed = true;
+    } else if(e.key == " ") {
+        spacePressed = true;
+        fireX=x
     }
 }
 
@@ -29,9 +35,9 @@ function keyUpHandler(e) {
     }
 }
 
-function drawFire(x,y) {
+function drawFire(y) {
     ctx.beginPath();
-    ctx.arc(x, y, 8, 0, Math.PI*2);
+    ctx.arc(fireX, y, 8, 0, Math.PI*2);
     ctx.fillStyle = "#0095DD";
     ctx.fill();
     ctx.closePath();
@@ -92,8 +98,17 @@ function draw() {
         ) {
         x -= 7;
       }
-    
-drawFire(x,y)
+
+      if(spacePressed){
+          drawFire(fireY)
+          fireY = fireY - 100
+        }
+
+        if(fireY==0){
+            fireY= bottom;
+            spacePressed = false;
+        }
+
 
     drawCannon(x,y)
   requestAnimationFrame(draw);
